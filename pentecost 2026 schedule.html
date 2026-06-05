@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pentecost 2026 — Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080810;
+  --surface:   #0F0F1A;
+  --surface2:  #161625;
+  --border:    #22223A;
+  --border2:   #2E2E4A;
+  --text:      #EEEEF8;
+  --muted:     #7070A0;
+  --gold:      #D4A843;
+  --gold-dim:  #8A6A1F;
+  --gold-glow: rgba(212,168,67,0.12);
+  --gastonia:  #D4A843;
+  --gastonia-bg: rgba(212,168,67,0.07);
+  --raleigh:   #4A90D9;
+  --raleigh-bg: rgba(74,144,217,0.07);
+  --columbia:  #4CAF7D;
+  --columbia-bg: rgba(76,175,125,0.07);
+  --greenville:#E07B54;
+  --greenville-bg: rgba(224,123,84,0.07);
+  --red:       #E05454;
+  --red-bg:    rgba(224,84,84,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans', sans-serif;
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+}
+
+/* grain overlay */
+body::after {
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:0.4;
+}
+
+/* ambient glow */
+body::before {
+  content:'';
+  position:fixed;
+  top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:400px;
+  background:radial-gradient(ellipse, rgba(212,168,67,0.06) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap {
+  position:relative;z-index:1;
+  max-width:1080px;margin:0 auto;
+  padding:0 20px 100px;
+}
+
+/* ── HEADER ── */
+header {
+  padding:60px 0 48px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:0;
+}
+.eyebrow {
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.eyebrow::before {
+  content:'';display:block;
+  width:32px;height:1px;background:var(--gold);
+}
+h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,9vw,96px);
+  font-weight:900;line-height:0.92;
+  color:var(--text);
+  letter-spacing:-1px;
+  margin-bottom:6px;
+}
+h1 span {
+  background:linear-gradient(135deg,#F5D080,#D4A843,#A8781A);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.h1-sub {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,2.5vw,24px);
+  font-weight:700;
+  color:var(--muted);
+  letter-spacing:1px;
+  margin-bottom:28px;
+}
+.meta-row {
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-top:20px;
+}
+.meta-chip {
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:1px;
+  padding:5px 14px;
+  border:1px solid var(--border2);
+  border-radius:2px;
+  color:var(--muted);
+  background:var(--surface);
+}
+.meta-chip b {color:var(--text);}
+
+/* ── NAV TABS ── */
+.tabs {
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:40px;
+  position:sticky;top:0;
+  background:var(--bg);
+  z-index:50;
+  padding-top:16px;
+}
+.tab {
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 24px;
+  border:none;background:none;
+  color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── PANELS ── */
+.panel{display:none;animation:fadeIn 0.3s ease;}
+.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--muted);
+  padding:28px 0 14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── COMMAND CARDS ── */
+.cmd-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:10px;
+  margin-bottom:8px;
+}
+.cmd-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:3px;
+  padding:16px 18px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.cmd-card:hover{border-color:var(--border2);}
+.cmd-card::after {
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+}
+.cmd-card.gastonia::after   {background:var(--gastonia);}
+.cmd-card.raleigh::after    {background:var(--raleigh);}
+.cmd-card.columbia::after   {background:var(--columbia);}
+.cmd-card.greenville::after {background:var(--greenville);}
+.cmd-card.neutral::after    {background:var(--border2);}
+.cmd-role {
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.cmd-name {
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:700;
+  color:var(--text);margin-bottom:4px;line-height:1.2;
+}
+.cmd-school {
+  font-size:11px;font-weight:500;
+}
+.cmd-school.gastonia  {color:var(--gastonia);}
+.cmd-school.raleigh   {color:var(--raleigh);}
+.cmd-school.columbia  {color:var(--columbia);}
+.cmd-school.greenville{color:var(--greenville);}
+.cmd-school.neutral   {color:var(--muted);}
+
+/* ── TEAM BLOCKS ── */
+.team-block {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:3px;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.team-hdr {
+  padding:18px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.team-hdr.gastonia-hdr  {background:linear-gradient(135deg,rgba(212,168,67,0.12),rgba(212,168,67,0.04));}
+.team-hdr.raleigh-hdr   {background:linear-gradient(135deg,rgba(74,144,217,0.12),rgba(74,144,217,0.04));}
+.team-hdr.columbia-hdr  {background:linear-gradient(135deg,rgba(76,175,125,0.12),rgba(76,175,125,0.04));}
+.team-hdr.neutral-hdr   {background:linear-gradient(135deg,rgba(112,112,160,0.12),rgba(112,112,160,0.04));}
+.team-name-big {
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:900;
+  letter-spacing:-0.5px;
+}
+.team-name-big.gastonia  {color:var(--gastonia);}
+.team-name-big.raleigh   {color:var(--raleigh);}
+.team-name-big.columbia  {color:var(--columbia);}
+.team-name-big.neutral   {color:var(--muted);}
+.team-hdr-right{text-align:right;}
+.team-phase {
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px;
+}
+.team-timing {
+  font-size:12px;font-weight:600;color:var(--text);
+}
+.team-mission {
+  padding:12px 22px;
+  font-size:13px;color:var(--muted);
+  border-bottom:1px solid var(--border);
+  font-style:italic;line-height:1.6;
+}
+.team-body {padding:18px 22px;}
+
+/* member rows */
+.member-row {
+  display:flex;align-items:baseline;
+  padding:7px 0;
+  border-bottom:1px solid var(--border);
+}
+.member-row:last-child{border-bottom:none;}
+.member-num {
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--muted);
+  width:24px;flex-shrink:0;
+}
+.member-name {
+  font-size:13px;font-weight:500;color:var(--text);
+  flex:1;
+}
+.member-tag {
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px;
+  margin-left:8px;
+}
+.member-tag.lead    {background:rgba(212,168,67,0.15);color:var(--gold);}
+.member-tag.grill   {background:rgba(224,84,84,0.15);color:#E08080;}
+.member-tag.pasta   {background:rgba(76,175,125,0.15);color:var(--columbia);}
+.member-tag.logistics{background:rgba(112,112,160,0.15);color:var(--muted);}
+.member-tag.float   {background:rgba(224,123,84,0.15);color:var(--greenville);}
+
+/* school divider within team */
+.school-divider {
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  padding:10px 0 6px;
+  display:flex;align-items:center;gap:10px;
+  margin-top:4px;
+}
+.school-divider.gastonia  {color:var(--gastonia);}
+.school-divider.raleigh   {color:var(--raleigh);}
+.school-divider.columbia  {color:var(--columbia);}
+.school-divider.greenville{color:var(--greenville);}
+.school-divider::after{content:'';flex:1;height:1px;}
+.school-divider.gastonia::after  {background:rgba(212,168,67,0.2);}
+.school-divider.raleigh::after   {background:rgba(74,144,217,0.2);}
+.school-divider.columbia::after  {background:rgba(76,175,125,0.2);}
+.school-divider.greenville::after{background:rgba(224,123,84,0.2);}
+
+/* ── TIMELINE ── */
+.phase-block{margin-bottom:40px;}
+.phase-title {
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.phase-dot {
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+
+.tl-row {
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:0;
+  margin-bottom:3px;
+  align-items:stretch;
+}
+.tl-time {
+  font-family:'DM Mono',monospace;
+  font-size:12px;font-weight:500;
+  color:var(--gold);
+  padding:14px 16px 14px 0;
+  text-align:right;
+  border-right:1px solid var(--border);
+  white-space:nowrap;
+  line-height:1.3;
+}
+.tl-time.crit{color:var(--red);}
+.tl-dot-col {
+  width:20px;flex-shrink:0;
+  display:flex;align-items:flex-start;
+  padding-top:20px;
+  justify-content:center;
+}
+.tl-dot {
+  width:6px;height:6px;border-radius:50%;
+  background:var(--border2);flex-shrink:0;
+}
+.tl-card {
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  transition:background 0.2s;
+}
+.tl-card:hover{background:var(--surface);}
+.tl-card.crit-card{background:var(--red-bg);}
+.tl-task {
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--text);
+  margin-bottom:4px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+}
+.tl-tag {
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:2px 7px;border-radius:2px;
+}
+.tl-tag.alpha    {background:rgba(212,168,67,0.12);color:var(--gastonia);}
+.tl-tag.bravo    {background:rgba(74,144,217,0.12);color:var(--raleigh);}
+.tl-tag.charlie  {background:rgba(76,175,125,0.12);color:var(--columbia);}
+.tl-tag.all      {background:rgba(255,255,255,0.06);color:var(--text);}
+.tl-tag.grill    {background:rgba(224,84,84,0.12);color:#E08080;}
+.tl-tag.logistics{background:rgba(112,112,160,0.12);color:var(--muted);}
+.tl-tag.crit     {background:rgba(224,84,84,0.15);color:var(--red);}
+.tl-detail {
+  font-size:13px;color:var(--muted);line-height:1.6;
+}
+.tl-who {
+  font-size:11px;color:var(--muted);margin-top:5px;
+  font-family:'DM Mono',monospace;letter-spacing:0.5px;
+}
+.tl-who b{color:var(--text);}
+
+/* ── STATIONS ── */
+.station-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:10px;
+  margin-bottom:32px;
+}
+.station-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:3px;overflow:hidden;
+}
+.station-top {
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.station-label {
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px;
+}
+.station-name-txt {
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:700;color:var(--text);
+}
+.station-count-badge {
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:1px;
+  padding:4px 10px;border-radius:2px;
+  border:1px solid var(--border2);color:var(--muted);
+}
+.station-body{padding:14px 16px;}
+.station-members{margin-bottom:10px;}
+.station-member-row{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 0;border-bottom:1px solid var(--border);
+}
+.station-member-row:last-child{border-bottom:none;}
+.sm-name{font-size:13px;font-weight:500;color:var(--text);flex:1;}
+.sm-school{
+  font-size:10px;font-family:'DM Mono',monospace;
+  letter-spacing:1px;
+}
+.sm-school.gastonia  {color:var(--gastonia);}
+.sm-school.raleigh   {color:var(--raleigh);}
+.sm-school.columbia  {color:var(--columbia);}
+.station-note{font-size:12px;color:var(--muted);line-height:1.6;font-style:italic;}
+
+/* safety rules */
+.safety-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:8px;
+}
+.safety-rule {
+  background:var(--red-bg);
+  border:1px solid rgba(224,84,84,0.15);
+  border-radius:3px;
+  padding:12px 14px;
+  font-size:12px;
+  color:#E09090;
+  line-height:1.6;
+}
+.safety-rule b{color:var(--red);}
+
+/* ── EDIT FAB ── */
+.edit-fab {
+  position:fixed;bottom:28px;right:28px;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--gold);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  box-shadow:0 4px 24px rgba(212,168,67,0.35);
+  transition:transform 0.2s,box-shadow 0.2s;
+  z-index:200;
+}
+.edit-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(212,168,67,0.5);}
+
+/* ── MODAL ── */
+.modal-overlay {
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);
+  z-index:300;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal-box {
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:4px;
+  padding:32px;max-width:420px;width:100%;
+}
+.modal-title {
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:700;color:var(--gold);
+  margin-bottom:6px;
+}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.modal-label {
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;display:block;
+}
+.modal-input {
+  width:100%;background:var(--surface);
+  border:1px solid var(--border2);border-radius:2px;
+  padding:10px 14px;color:var(--text);
+  font-family:'DM Mono',monospace;font-size:13px;
+  outline:none;margin-bottom:16px;
+}
+.modal-input:focus{border-color:var(--gold);}
+.modal-err{font-size:12px;color:var(--red);margin-bottom:12px;min-height:18px;}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.btn-sec {
+  padding:9px 20px;border-radius:2px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--muted);cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;
+}
+.btn-pri {
+  padding:9px 20px;border-radius:2px;
+  background:var(--gold);border:none;color:#000;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  font-weight:600;
+}
+[contenteditable="true"]{
+  outline:1px dashed rgba(212,168,67,0.35);
+  border-radius:2px;cursor:text;
+  min-width:20px;display:inline-block;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .tl-row{grid-template-columns:62px 1fr;}
+  .tl-time{font-size:10px;padding:14px 10px 14px 0;}
+  .cmd-grid{grid-template-columns:1fr 1fr;}
+  .tab{padding:12px 14px;font-size:10px;}
+}
+
+/* tentative bar */
+.tentative {
+  background:rgba(212,168,67,0.06);
+  border:1px solid rgba(212,168,67,0.15);
+  border-radius:2px;padding:10px 16px;
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:2px;
+  color:var(--gold);text-align:center;
+  margin-bottom:28px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="eyebrow">IUIC Carolinas Region — Kitchen Operations</div>
+  <h1><span>Pentecost</span><br>2026</h1>
+  <div class="h1-sub">Master Operations Schedule</div>
+  <div class="meta-row">
+    <div class="meta-chip">📍 <b>Meridian Convention Center</b> — Greensboro, NC</div>
+    <div class="meta-chip">📅 <b>June 7, 2026</b></div>
+    <div class="meta-chip">👥 <b>783 Guests</b></div>
+    <div class="meta-chip">🍽 Service <b>3:00 PM – 7:00 PM</b></div>
+    <div class="meta-chip">⏰ All leads arrive <b>8:30 AM</b></div>
+  </div>
+</header>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('command',this)">Command</button>
+  <button class="tab" onclick="showTab('teams',this)">Teams</button>
+  <button class="tab" onclick="showTab('timeline',this)">Timeline</button>
+  <button class="tab" onclick="showTab('stations',this)">Stations</button>
+</div>
+
+<!-- ══════════════════════════════════
+     COMMAND
+══════════════════════════════════ -->
+<div class="panel active" id="panel-command">
+  <div class="tentative">⚠ TENTATIVE — SUBJECT TO CHANGE</div>
+
+  <div class="sec-title">Overall Command</div>
+  <div class="cmd-grid" style="margin-bottom:28px;">
+    <div class="cmd-card gastonia" style="grid-column:1/-1;max-width:320px;">
+      <div class="cmd-role">Overall Kitchen Command</div>
+      <div class="cmd-name">Officer Mikha'el</div>
+      <div class="cmd-school gastonia">Gastonia (Charlotte) — Bravo Lead</div>
+    </div>
+  </div>
+
+  <div class="sec-title">School Leads</div>
+  <div class="cmd-grid">
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Gastonia — 2nd</div>
+      <div class="cmd-name">Officer Ananias</div>
+      <div class="cmd-school gastonia">Gastonia</div>
+    </div>
+    <div class="cmd-card raleigh">
+      <div class="cmd-role">Raleigh — Lead</div>
+      <div class="cmd-name">Officer Hezekiah</div>
+      <div class="cmd-school raleigh">Raleigh, NC — Alpha Lead</div>
+    </div>
+    <div class="cmd-card raleigh">
+      <div class="cmd-role">Raleigh — 2nd</div>
+      <div class="cmd-name">Officer Daniel</div>
+      <div class="cmd-school raleigh">Raleigh, NC</div>
+    </div>
+    <div class="cmd-card columbia">
+      <div class="cmd-role">Columbia — Lead</div>
+      <div class="cmd-name">Officer Yah-Nahshon</div>
+      <div class="cmd-school columbia">Columbia, SC — Charlie Lead</div>
+    </div>
+    <div class="cmd-card columbia">
+      <div class="cmd-role">Columbia — 2nd / Grill</div>
+      <div class="cmd-name">Officer Judah</div>
+      <div class="cmd-school columbia">Columbia, SC</div>
+    </div>
+    <div class="cmd-card greenville">
+      <div class="cmd-role">Greenville — Lead</div>
+      <div class="cmd-name">Officer Jesse</div>
+      <div class="cmd-school greenville">Greenville, SC — Float</div>
+    </div>
+    <div class="cmd-card greenville">
+      <div class="cmd-role">Greenville — 2nd</div>
+      <div class="cmd-name">Officer Eliakim</div>
+      <div class="cmd-school greenville">Greenville, SC</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Grill Team</div>
+  <div class="cmd-grid">
+    <div class="cmd-card columbia">
+      <div class="cmd-role">Grill 1 — Chicken</div>
+      <div class="cmd-name">Officer Judah</div>
+      <div class="cmd-school columbia">Columbia</div>
+    </div>
+    <div class="cmd-card raleigh">
+      <div class="cmd-role">Grill 1 — Chicken</div>
+      <div class="cmd-name">Officer John</div>
+      <div class="cmd-school raleigh">Raleigh</div>
+    </div>
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Grill 1 — Chicken</div>
+      <div class="cmd-name">Soldier Tamir</div>
+      <div class="cmd-school gastonia">Gastonia</div>
+    </div>
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Grill 1 — Chicken</div>
+      <div class="cmd-name">Soldier Esaias</div>
+      <div class="cmd-school gastonia">Gastonia</div>
+    </div>
+  </div>
+  <div style="font-size:12px;color:var(--muted);margin:8px 0 28px;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;">
+    🔥 <b style="color:var(--text);">Grill 2</b> — Pasta &amp; sauce reheat (managed by pasta carriers per school) &nbsp;·&nbsp;
+    🍟 <b style="color:var(--text);">Turkey Fryers</b> — Plantains exclusively &nbsp;·&nbsp;
+    🔥 <b style="color:var(--text);">Grill 3</b> — Overflow / Leadership meal
+  </div>
+
+  <div class="sec-title">Logistics — Dedicated All Day</div>
+  <div class="cmd-grid">
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Logistics — All Day</div>
+      <div class="cmd-name">Brother David</div>
+      <div class="cmd-school gastonia">Gastonia — Sam's Run + Full Day Support</div>
+    </div>
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Logistics — Sam's Run</div>
+      <div class="cmd-name">Soldier Makabi</div>
+      <div class="cmd-school gastonia">Gastonia</div>
+    </div>
+    <div class="cmd-card gastonia">
+      <div class="cmd-role">Logistics — Sam's Run</div>
+      <div class="cmd-name">MOV Mark</div>
+      <div class="cmd-school gastonia">Gastonia</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TEAMS
+══════════════════════════════════ -->
+<div class="panel" id="panel-teams">
+  <div class="tentative">⚠ TENTATIVE — Teams assigned by school. Greenville floats to lightest area.</div>
+
+  <!-- ALPHA — RALEIGH -->
+  <div class="team-block">
+    <div class="team-hdr raleigh-hdr">
+      <div>
+        <div class="team-name-big raleigh">Alpha Team</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Setup · Prep · Service · Breakdown Lead</div>
+      </div>
+      <div class="team-hdr-right">
+        <div class="team-phase">Primary School</div>
+        <div class="team-timing" style="color:var(--raleigh);">Raleigh, NC</div>
+      </div>
+    </div>
+    <div class="team-mission">Station setup · Tent support · Salad prep · Fruit prep · Service 3–7PM · Lead breakdown at 7PM</div>
+    <div class="team-body">
+      <div class="school-divider raleigh">Raleigh</div>
+      <div class="member-row"><span class="member-num">1</span><span class="member-name">Officer Hezekiah</span><span class="member-tag lead">Lead</span></div>
+      <div class="member-row"><span class="member-num">2</span><span class="member-name">Officer Daniel</span><span class="member-tag lead">2nd</span></div>
+      <div class="member-row"><span class="member-num">3</span><span class="member-name">Officer John</span><span class="member-tag grill">Grill 1</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">4</span><span class="member-name">Sister Neorah</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">5</span><span class="member-name">Sister Harela</span></div>
+      <div class="member-row"><span class="member-num">6</span><span class="member-name">Sister Abigail</span></div>
+      <div class="member-row"><span class="member-num">7</span><span class="member-name">Sister Naomi</span></div>
+      <div class="member-row"><span class="member-num">8</span><span class="member-name">Sister Abbey</span></div>
+      <div class="member-row"><span class="member-num">9</span><span class="member-name">Sister Zakiya</span></div>
+      <div class="member-row"><span class="member-num">10</span><span class="member-name">Sister Nasya Israel</span></div>
+      <div class="member-row"><span class="member-num">11</span><span class="member-name">Sister Bayla</span></div>
+      <div class="member-row"><span class="member-num">12</span><span class="member-name">Sister Kezia</span></div>
+      <div class="member-row"><span class="member-num">13</span><span class="member-name">Sister Binaah</span></div>
+      <div class="member-row"><span class="member-num">14</span><span class="member-name">Sister Keturah</span></div>
+      <div class="member-row"><span class="member-num">15</span><span class="member-name">Sister Nasya</span></div>
+      <div class="member-row"><span class="member-num">16</span><span class="member-name">Sister Sarah Israel</span></div>
+      <div class="member-row"><span class="member-num">17</span><span class="member-name">Sister Ari'el</span></div>
+      <div class="member-row"><span class="member-num">18</span><span class="member-name">Sister Mattea</span></div>
+      <div class="member-row"><span class="member-num">19</span><span class="member-name">Sister Thalia</span></div>
+      <div class="member-row"><span class="member-num">20</span><span class="member-name">Sister Jada</span></div>
+      <div class="member-row"><span class="member-num">21</span><span class="member-name">Sister Judith Israel</span></div>
+    </div>
+  </div>
+
+  <!-- BRAVO — GASTONIA -->
+  <div class="team-block">
+    <div class="team-hdr gastonia-hdr">
+      <div>
+        <div class="team-name-big gastonia">Bravo Team</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Finish Prep · Fruit Cups · Service · Cleanup</div>
+      </div>
+      <div class="team-hdr-right">
+        <div class="team-phase">Primary School</div>
+        <div class="team-timing" style="color:var(--gastonia);">Gastonia (Charlotte)</div>
+      </div>
+    </div>
+    <div class="team-mission">Chafer load · Fruit cup filling · Service 3–7PM · All-hands cleanup</div>
+    <div class="team-body">
+      <div class="school-divider gastonia">Gastonia</div>
+      <div class="member-row"><span class="member-num">1</span><span class="member-name">Officer Mikha'el</span><span class="member-tag lead">Overall Command</span></div>
+      <div class="member-row"><span class="member-num">2</span><span class="member-name">Officer Ananias</span><span class="member-tag lead">2nd</span></div>
+      <div class="member-row"><span class="member-num">3</span><span class="member-name">Soldier Tamir</span><span class="member-tag grill">Grill 1</span></div>
+      <div class="member-row"><span class="member-num">4</span><span class="member-name">Soldier Esaias</span><span class="member-tag grill">Grill 1</span></div>
+      <div class="member-row"><span class="member-num">5</span><span class="member-name">Sister Eleyah</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">6</span><span class="member-name">Sister Elisheeva</span></div>
+      <div class="member-row"><span class="member-num">7</span><span class="member-name">Sister Hadassah</span></div>
+      <div class="member-row"><span class="member-num">8</span><span class="member-name">Sister Aliyah</span></div>
+      <div class="member-row"><span class="member-num">9</span><span class="member-name">Sister Lil Ju Ju</span></div>
+      <div class="member-row"><span class="member-num">10</span><span class="member-name">Sister Moriah</span></div>
+      <div class="member-row"><span class="member-num">11</span><span class="member-name">Sister Esther Baht Israel</span></div>
+      <div class="member-row"><span class="member-num">12</span><span class="member-name">Sister Lois Rahel</span></div>
+      <div class="member-row"><span class="member-num">13</span><span class="member-name">Sister Atarah (Wife)</span></div>
+      <div class="member-row"><span class="member-num">14</span><span class="member-name">IUIC Tamir</span></div>
+      <div class="member-row"><span class="member-num">15</span><span class="member-name">Sister Febe</span></div>
+      <div class="member-row"><span class="member-num">16</span><span class="member-name">Sister Yasmin</span></div>
+      <div class="member-row"><span class="member-num">17</span><span class="member-name">Sister Oseia</span></div>
+      <div class="member-row"><span class="member-num">18</span><span class="member-name">Sister Zuri</span></div>
+      <div class="member-row"><span class="member-num">19</span><span class="member-name">Sister Keziah YahYana</span></div>
+      <div class="member-row"><span class="member-num">20</span><span class="member-name">Sister Chana</span></div>
+      <div class="member-row"><span class="member-num">21</span><span class="member-name">Sister Damaris</span></div>
+      <div class="member-row"><span class="member-num">22</span><span class="member-name">Sister Emzara</span></div>
+      <div class="member-row"><span class="member-num">23</span><span class="member-name">Sister Avi</span></div>
+      <div class="member-row"><span class="member-num">24</span><span class="member-name">Sister Ricaiah Israel</span></div>
+      <div class="member-row"><span class="member-num">25</span><span class="member-name">Sister Maxine</span></div>
+      <div class="member-row"><span class="member-num">26</span><span class="member-name">Sister Niyaah Israel</span></div>
+      <div class="member-row"><span class="member-num">27</span><span class="member-name">Sister Laura Barthelemy</span></div>
+      <div class="member-row"><span class="member-num">28</span><span class="member-name">Sister Rickel</span></div>
+      <div class="member-row"><span class="member-num">29</span><span class="member-name">Sister Lakiera</span></div>
+    </div>
+  </div>
+
+  <!-- CHARLIE — COLUMBIA -->
+  <div class="team-block">
+    <div class="team-hdr columbia-hdr">
+      <div>
+        <div class="team-name-big columbia">Charlie Team</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Pasta Reheat · Service · Breakdown Support</div>
+      </div>
+      <div class="team-hdr-right">
+        <div class="team-phase">Primary School</div>
+        <div class="team-timing" style="color:var(--columbia);">Columbia, SC</div>
+      </div>
+    </div>
+    <div class="team-mission">Pasta carriers arrive 10AM · Reheat pasta on Grill 2 · Mix at venue · Service 3–7PM · Breakdown support</div>
+    <div class="team-body">
+      <div class="school-divider columbia">Columbia</div>
+      <div class="member-row"><span class="member-num">1</span><span class="member-name">Officer Yah-Nahshon</span><span class="member-tag lead">Lead</span></div>
+      <div class="member-row"><span class="member-num">2</span><span class="member-name">Officer Judah</span><span class="member-tag lead">2nd</span><span class="member-tag grill">Grill 1</span></div>
+      <div class="member-row"><span class="member-num">3</span><span class="member-name">Sister Hadassah Israel</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">4</span><span class="member-name">Soldier Isaac Israel</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">5</span><span class="member-name">Sister Kaliyah Israel</span></div>
+      <div class="member-row"><span class="member-num">6</span><span class="member-name">Sister Jael</span></div>
+      <div class="member-row"><span class="member-num">7</span><span class="member-name">Sister Elianah Israel</span></div>
+      <div class="member-row"><span class="member-num">8</span><span class="member-name">Sister Kaniyah Israel</span></div>
+      <div class="member-row"><span class="member-num">9</span><span class="member-name">Sister Zehirah</span></div>
+      <div class="member-row"><span class="member-num">10</span><span class="member-name">Sister Leah</span></div>
+      <div class="member-row"><span class="member-num">11</span><span class="member-name">Sister Eliisa</span></div>
+      <div class="member-row"><span class="member-num">12</span><span class="member-name">Sister Atarah H.O OFC Benaiah</span></div>
+      <div class="member-row"><span class="member-num">13</span><span class="member-name">Sister Anna</span></div>
+      <div class="member-row"><span class="member-num">14</span><span class="member-name">Sister Raya Israel</span></div>
+      <div class="member-row"><span class="member-num">15</span><span class="member-name">Sister Naomi Israel</span></div>
+      <div class="member-row"><span class="member-num">16</span><span class="member-name">Sister Amar</span></div>
+      <div class="member-row"><span class="member-num">17</span><span class="member-name">Sister Atarah Israel</span></div>
+      <div class="member-row"><span class="member-num">18</span><span class="member-name">Sister Noya</span></div>
+      <div class="member-row"><span class="member-num">19</span><span class="member-name">Sister Honesty</span></div>
+      <div class="member-row"><span class="member-num">20</span><span class="member-name">Sister Daejhana Israel</span></div>
+    </div>
+  </div>
+
+  <!-- GREENVILLE FLOAT -->
+  <div class="team-block">
+    <div class="team-hdr neutral-hdr">
+      <div>
+        <div class="team-name-big neutral">Greenville — Float</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Fill where lightest · Pasta carriers arrive 10AM</div>
+      </div>
+      <div class="team-hdr-right">
+        <div class="team-phase">School</div>
+        <div class="team-timing" style="color:var(--greenville);">Greenville, SC</div>
+      </div>
+    </div>
+    <div class="team-mission">Greenville fills in where the team is lightest at any given time. Pasta carriers arrive 10AM with their 3 pans.</div>
+    <div class="team-body">
+      <div class="school-divider greenville">Greenville</div>
+      <div class="member-row"><span class="member-num">1</span><span class="member-name">Officer Jesse</span><span class="member-tag lead">Lead</span><span class="member-tag float">Float</span></div>
+      <div class="member-row"><span class="member-num">2</span><span class="member-name">Officer Eliakim</span><span class="member-tag lead">2nd</span><span class="member-tag float">Float</span></div>
+      <div class="member-row"><span class="member-num">3</span><span class="member-name">Sister Anna</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">4</span><span class="member-name">M.O.V Jeremy Israel</span><span class="member-tag pasta">Pasta Carrier</span></div>
+      <div class="member-row"><span class="member-num">5</span><span class="member-name">Sister Ayahni</span></div>
+      <div class="member-row"><span class="member-num">6</span><span class="member-name">Sister Chances</span></div>
+      <div class="member-row"><span class="member-num">7</span><span class="member-name">Soldier Aharon Israel</span></div>
+      <div class="member-row"><span class="member-num">8</span><span class="member-name">Sister Kaylin</span></div>
+      <div class="member-row"><span class="member-num">9</span><span class="member-name">Sister Edna</span></div>
+      <div class="member-row"><span class="member-num">10</span><span class="member-name">Sister Zaneta Shalev</span></div>
+      <div class="member-row"><span class="member-num">11</span><span class="member-name">Sister Jasmine</span></div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS -->
+  <div class="team-block">
+    <div class="team-hdr neutral-hdr">
+      <div>
+        <div class="team-name-big neutral">Logistics</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Sam's Curbside · All-Day Support</div>
+      </div>
+      <div class="team-hdr-right">
+        <div class="team-phase">School</div>
+        <div class="team-timing" style="color:var(--gastonia);">Gastonia</div>
+      </div>
+    </div>
+    <div class="team-mission">Sam's Club curbside pickup at 7AM. Unload and distribute supplies. Brother David dedicated all day support across all teams.</div>
+    <div class="team-body">
+      <div class="school-divider gastonia">Gastonia</div>
+      <div class="member-row"><span class="member-num">1</span><span class="member-name">Brother David</span><span class="member-tag logistics">All Day</span></div>
+      <div class="member-row"><span class="member-num">2</span><span class="member-name">Soldier Makabi</span><span class="member-tag logistics">Sam's Run</span></div>
+      <div class="member-row"><span class="member-num">3</span><span class="member-name">MOV Mark</span><span class="member-tag logistics">Sam's Run</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TIMELINE
+══════════════════════════════════ -->
+<div class="panel" id="panel-timeline">
+
+  <!-- Phase 1 -->
+  <div class="phase-block">
+    <div class="phase-title"><div class="phase-dot" style="background:#D4A843"></div>Phase 1 — Morning Mobilization</div>
+
+    <div class="tl-row"><div class="tl-time">7:00 AM</div><div class="tl-card">
+      <div class="tl-task">Logistics departs for Sam's Club <span class="tl-tag logistics">Logistics</span></div>
+      <div class="tl-detail">Sam's Club curbside pickup opens 7AM. Brother David, Soldier Makabi, MOV Mark. Pick up all remaining produce, fruit, and supplies.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time crit">8:30 AM</div><div class="tl-card crit-card">
+      <div class="tl-task">⛔ ALL LEADS ARRIVE — VENUE OPENS <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">Roll call immediately. Unload all vehicles. Cold items straight to coolers. Label all pans by school. Color tape all equipment by school.</div>
+    </div></div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-block">
+    <div class="phase-title"><div class="phase-dot" style="background:#4A90D9"></div>Phase 2 — Setup</div>
+
+    <div class="tl-row"><div class="tl-time">8:30 AM</div><div class="tl-card">
+      <div class="tl-task">Command tent erection begins <span class="tl-tag alpha">Alpha</span></div>
+      <div class="tl-detail">Dedicated tent crew establishes large command center tent. Simultaneous with Sam's Club logistics run.</div>
+      <div class="tl-who"><b>Tent crew — assigned by Ofc. Mikha'el</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">8:30 AM</div><div class="tl-card">
+      <div class="tl-task">Full station setup begins <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">Grills, turkey fryers, prep tables, serving line (5 lines), fruit cup table, beverage station. Color tape all equipment by school. Label every pan.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time crit">10:15 AM</div><div class="tl-card crit-card">
+      <div class="tl-task">⛔ DEADLINE — Tent + all stations built <span class="tl-tag all">All</span></div>
+      <div class="tl-detail">Tent fully erected. All stations confirmed. Ofc. Mikha'el walks and signs off on all stations before kitchen prep begins.</div>
+    </div></div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-block">
+    <div class="phase-title"><div class="phase-dot" style="background:#4CAF7D"></div>Phase 3 — Kitchen Prep</div>
+
+    <div class="tl-row"><div class="tl-time">10:00 AM</div><div class="tl-card">
+      <div class="tl-task">Pasta carriers arrive with cooked cold pasta + sauce <span class="tl-tag all">All Schools</span></div>
+      <div class="tl-detail">All 4 schools arrive with their assigned pans of cooked cold pasta and cold sauce in separate containers. Gastonia 7 pans · Columbia 7 pans · Raleigh 6 pans + 1 vegan · Greenville 3 pans. Go directly to Grill 2.</div>
+      <div class="tl-who"><b>Pasta carriers assigned by each school lead</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">10:00 AM</div><div class="tl-card">
+      <div class="tl-task">Fruit prep begins <span class="tl-tag bravo">Bravo</span></div>
+      <div class="tl-detail">Wash all fruit. Cut watermelon, cantaloupe, pineapple into bite-size pieces. Stage in covered containers ready for cup filling at 11:30AM.</div>
+      <div class="tl-who"><b>4 sisters — Bravo fruit prep team</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">10:30 AM</div><div class="tl-card">
+      <div class="tl-task">All 3 grills on — Chicken reheat begins <span class="tl-tag all">Grill Team</span></div>
+      <div class="tl-detail">
+        🔥 <b>Grill 1</b> — Chicken reheat on LOW. Add chicken broth to pans. Cover with lids. Target 135°F+.<br>
+        🔥 <b>Grill 2</b> — Pasta + sauce reheat. Each school's pasta carriers manage their own pans.<br>
+        🍟 <b>Turkey Fryers</b> — Plantain batches begin. Adults 13+ = 3 pc · Kids under 13 = 2 pc.
+      </div>
+      <div class="tl-who"><b>Grill 1: Ofc. Judah · Ofc. John · Soldier Tamir · Soldier Esaias</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-card">
+      <div class="tl-task">Pasta mixed at venue <span class="tl-tag charlie">Charlie</span> <span class="tl-tag all">All Schools</span></div>
+      <div class="tl-detail">Once pasta and sauce are reheated on Grill 2 — mix noodles + sauce ONLY at venue. Never pre-mixed in transport. 4 red/yellow peppers + 1 onion per pan. Mild jerk. Raleigh sets up vegan station separately.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-card">
+      <div class="tl-task">Salad prep begins <span class="tl-tag alpha">Alpha</span></div>
+      <div class="tl-detail">Cut romaine, cherry tomatoes, cucumbers, red onions. Load into pans. Keep cold at all times — 40°F or below. Do NOT leave at room temp.</div>
+      <div class="tl-who"><b>4 sisters — Alpha salad prep team</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">11:30 AM</div><div class="tl-card">
+      <div class="tl-task">Fruit cup filling begins <span class="tl-tag bravo">Bravo</span></div>
+      <div class="tl-detail">Fill 9oz cups with mixed cut fruit. ~626 cups total. Babies 0–3 receive no cup. Arrange cups on table in rows. Cover with plastic wrap until service opens.</div>
+      <div class="tl-who"><b>4 sisters — Bravo fruit cup team</b></div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">12:00 PM</div><div class="tl-card">
+      <div class="tl-task">Chicken dice + slice <span class="tl-tag all">Grill Team</span></div>
+      <div class="tl-detail">Once chicken is at temp, dice and slice for serving. 6 oz per plate. Keep covered and hot. Continue plantain batches on fryers.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time crit">1:30 PM</div><div class="tl-card crit-card">
+      <div class="tl-task">⛔ BEGIN LOADING CHAFERS <span class="tl-tag all">All Stations</span></div>
+      <div class="tl-detail">Load pasta + all sides into chafers at 1:30PM — not before. Sterno holds temp from this point. Pasta in chafer too early = mush. All stations loaded and hot.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">2:00 PM</div><div class="tl-card">
+      <div class="tl-task">Final temp check — Ofc. Mikha'el walks all stations <span class="tl-tag all">Command</span></div>
+      <div class="tl-detail">Hot food 135°F+. Cold food 40°F or below. Nothing sitting at room temp. Fruit cups uncovered and staged. Salad pans out of cooler.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-card">
+      <div class="tl-task">Final staging + warm bread <span class="tl-tag bravo">Bravo</span></div>
+      <div class="tl-detail">Warm unleavened bread. Beverage station fully filled. All serving line positions confirmed and staffed. Fruit cup table set.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">2:45 PM</div><div class="tl-card">
+      <div class="tl-task">Full team briefing <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">Station assignments confirmed. Dress code confirmed — men: black + chef jackets · sisters: black dress + black head wraps. Ofc. Mikha'el addresses full team. 15 minutes to service.</div>
+    </div></div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-block">
+    <div class="phase-title"><div class="phase-dot" style="background:#E05454"></div>Phase 4 — Service</div>
+
+    <div class="tl-row"><div class="tl-time crit">3:00 PM</div><div class="tl-card crit-card">
+      <div class="tl-task">⭐ SERVICE BEGINS <span class="tl-tag all">All Stations Live</span></div>
+      <div class="tl-detail">5 serving lines open. 783 guests. Target full service by 7PM. Bravo and Alpha own the floor. Charlie supports and monitors breakdown readiness.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">3:00–7:00 PM</div><div class="tl-card">
+      <div class="tl-task">5 serving lines active <span class="tl-tag bravo">Bravo</span> <span class="tl-tag alpha">Alpha</span></div>
+      <div class="tl-detail">3 staff per line — Position 1: Chicken · Position 2: Pasta + Salad · Position 3: Plantains + Bread. Beverage station: 3 staff. Floor runners: 2 staff.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">3:00–7:00 PM</div><div class="tl-card">
+      <div class="tl-task">Grill team — hold temp + replenish <span class="tl-tag all">Grill Team</span></div>
+      <div class="tl-detail">Maintain chicken at 135°F+. Continue plantain batches on turkey fryers as needed. Replenish serving line pans. Grill team stays at stations through full service.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">3:00–7:00 PM</div><div class="tl-card">
+      <div class="tl-task">Greenville floats to lightest station <span class="tl-tag all">Greenville</span></div>
+      <div class="tl-detail">Ofc. Jesse assesses where coverage is lightest and directs Greenville team accordingly throughout service window.</div>
+    </div></div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase-block">
+    <div class="phase-title"><div class="phase-dot" style="background:#4CAF7D"></div>Phase 5 — Breakdown & Cleanup</div>
+
+    <div class="tl-row"><div class="tl-time crit">7:00 PM</div><div class="tl-card crit-card">
+      <div class="tl-task">⛔ SERVICE CLOSES — BREAKDOWN BEGINS <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">All teams transition to breakdown immediately. Alpha leads breakdown. Every person on cleanup duty — no exceptions.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">7:00 PM</div><div class="tl-card">
+      <div class="tl-task">Breakdown sequence <span class="tl-tag alpha">Alpha</span></div>
+      <div class="tl-detail">Break down chafers · Clear serving tables · Consolidate leftover food · Pack equipment by school (color tape) · Begin floor sweep and venue restore.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">7:30 PM</div><div class="tl-card">
+      <div class="tl-task">Equipment checkout — all schools <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">Each school verifies their color-taped equipment is accounted for. Sign out with Ofc. Mikha'el before loading vehicles.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time">TBD</div><div class="tl-card">
+      <div class="tl-task">Venue restore <span class="tl-tag all">All Teams</span></div>
+      <div class="tl-detail">Full venue restore to original condition. Tables back in place. Floors clean. All trash removed.</div>
+    </div></div>
+
+    <div class="tl-row"><div class="tl-time crit">LAST OUT</div><div class="tl-card crit-card">
+      <div class="tl-task">Ofc. Mikha'el final walkthrough — Gastonia closes</div>
+      <div class="tl-detail">Venue confirmed clear. Final debrief. Gastonia last out.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STATIONS
+══════════════════════════════════ -->
+<div class="panel" id="panel-stations">
+
+  <div class="sec-title">Service Stations — 3:00 PM</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--muted);">
+    <b style="color:var(--text);">5 Serving Lines</b> · 3 staff per line · ~60 guests/hr per line · 900-guest capacity over 3 hrs · Beverage station separate
+  </div>
+
+  <div class="station-grid">
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Active 3PM – 7PM</div><div class="station-name-txt">Serving Lines 1–5</div></div>
+        <div class="station-count-badge">15 STAFF</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">Bravo + Alpha members</span><span class="sm-school gastonia">Gastonia / Raleigh</span></div>
+        </div>
+        <div class="station-note">3 per line: Position 1 — Chicken · Position 2 — Pasta + Salad · Position 3 — Plantains + Bread. Specific assignments by team leads.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Active 3PM – 7PM</div><div class="station-name-txt">Beverage Station</div></div>
+        <div class="station-count-badge">3 STAFF</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">2 servers + 1 runner</span></div>
+        </div>
+        <div class="station-note">Infused water · Lemonade · Fruit punch. Runner keeps pitchers filled continuously throughout service.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Pre-filled by 2:30PM</div><div class="station-name-txt">Fruit Cup Table</div></div>
+        <div class="station-count-badge">626 CUPS</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">4 sisters — filling from 11:30AM</span><span class="sm-school gastonia">Bravo</span></div>
+        </div>
+        <div class="station-note">9oz cups. Watermelon · Cantaloupe · Pineapple. Babies 0–3 excluded (~63 guests). Cups pre-arranged on table, covered until 3PM.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Grill 1 — Active 10:30AM+</div><div class="station-name-txt">Chicken Station</div></div>
+        <div class="station-count-badge">4 STAFF</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">Officer Judah</span><span class="sm-school columbia">Columbia</span></div>
+          <div class="station-member-row"><span class="sm-name">Officer John</span><span class="sm-school raleigh">Raleigh</span></div>
+          <div class="station-member-row"><span class="sm-name">Soldier Tamir</span><span class="sm-school gastonia">Gastonia</span></div>
+          <div class="station-member-row"><span class="sm-name">Soldier Esaias</span><span class="sm-school gastonia">Gastonia</span></div>
+        </div>
+        <div class="station-note">Reheat on LOW — hold only, not cooking from scratch. Add chicken broth. Cover with lids. 135°F+ at all times. 6 oz per plate.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Grill 2 — Active 10:30AM</div><div class="station-name-txt">Pasta Reheat</div></div>
+        <div class="station-count-badge">24 PANS</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">Pasta carriers per school</span></div>
+        </div>
+        <div class="station-note">Each school manages their own pans on Grill 2. Reheat pasta and sauce separately. Mix at venue 11AM — NEVER pre-mixed. 4 peppers + 1 onion per pan.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Turkey Fryers — 10:30AM+</div><div class="station-name-txt">Plantain Station</div></div>
+        <div class="station-count-badge">FRYERS ONLY</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">Grill team rotation</span></div>
+        </div>
+        <div class="station-note">Turkey fryers only — never on grill. Adults 13+ = 3 pc · Kids under 13 = 2 pc. Continuous batches from 10:30AM through service.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Active 10AM</div><div class="station-name-txt">Fruit Prep</div></div>
+        <div class="station-count-badge">4 STAFF</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">4 sisters — Bravo assigned</span><span class="sm-school gastonia">Gastonia</span></div>
+        </div>
+        <div class="station-note">Wash and cut all fruit starting 10AM. Watermelon · Cantaloupe · Pineapple. Feeds directly into Fruit Cup team at 11:30AM.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Active 11AM</div><div class="station-name-txt">Salad Prep</div></div>
+        <div class="station-count-badge">4 STAFF</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">4 sisters — Alpha assigned</span><span class="sm-school raleigh">Raleigh</span></div>
+        </div>
+        <div class="station-note">Cut romaine, cherry tomatoes, cucumbers, red onions. Load into pans. 40°F or below at all times. Never at room temp.</div>
+      </div>
+    </div>
+
+    <div class="station-card">
+      <div class="station-top">
+        <div><div class="station-label">Grill 3</div><div class="station-name-txt">Leadership Meal</div></div>
+        <div class="station-count-badge">TBD</div>
+      </div>
+      <div class="station-body">
+        <div class="station-members">
+          <div class="station-member-row"><span class="sm-name">Assignment TBD</span></div>
+        </div>
+        <div class="station-note">Oxtails · Rice &amp; peas · Cabbage · Fried fish. For Bishop &amp; Captains. Grill 3 dedicated. Assignment pending.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sec-title">Food Safety — Non-Negotiable</div>
+  <div class="safety-grid">
+    <div class="safety-rule">🌡 Hot food: <b>135°F minimum</b> at all times. No exceptions.</div>
+    <div class="safety-rule">🧊 Cold food: <b>40°F or below</b> at all times.</div>
+    <div class="safety-rule">⛔ <b>Nothing sits at room temp.</b> Ever.</div>
+    <div class="safety-rule">⛔ Chafers load at <b>1:30PM only.</b> Not before.</div>
+    <div class="safety-rule">🍝 Noodles + sauce travel <b>SEPARATE.</b> Mix at venue only.</div>
+    <div class="safety-rule">🍗 Chicken arrives <b>fully cooked, diced, THAWED.</b> Never frozen.</div>
+    <div class="safety-rule">🍟 Plantains on <b>turkey fryers only.</b> Not on grill.</div>
+    <div class="safety-rule">🧤 <b>Large nitrile gloves only.</b> No Sam's prep gloves.</div>
+    <div class="safety-rule">🏷 Label <b>every pan:</b> school name + contents.</div>
+    <div class="safety-rule">🎨 <b>Color tape all equipment</b> by school. Inventory in/out.</div>
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<!-- EDIT FAB -->
+<button class="edit-fab" onclick="openEdit()" title="Edit">✏️</button>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div id="pwView">
+      <div class="modal-title">Edit Mode</div>
+      <div class="modal-sub">Enter your command password to enable live editing.</div>
+      <label class="modal-label">Password</label>
+      <input type="password" class="modal-input" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()">
+      <div class="modal-err" id="pwErr"></div>
+      <div class="modal-btns">
+        <button class="btn-sec" onclick="closeModal()">Cancel</button>
+        <button class="btn-pri" onclick="checkPw()">Unlock</button>
+      </div>
+    </div>
+    <div id="editView" style="display:none">
+      <div class="modal-title">Editing Active</div>
+      <div class="modal-sub">Tap any text on the page to edit it directly. Your changes are live immediately.</div>
+      <div class="modal-btns">
+        <button class="btn-pri" onclick="disableEdit()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+const PW = 'pentecost2026';
+function openEdit() {
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('pwErr').textContent = '';
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwView').style.display = 'block';
+  document.getElementById('editView').style.display = 'none';
+}
+function checkPw() {
+  if (document.getElementById('pwInput').value === PW) {
+    enableEdit();
+  } else {
+    document.getElementById('pwErr').textContent = 'Incorrect password.';
+  }
+}
+function enableEdit() {
+  document.getElementById('pwView').style.display = 'none';
+  document.getElementById('editView').style.display = 'block';
+  const sel = [
+    '.tl-task','.tl-detail','.tl-who',
+    '.member-name','.cmd-name','.cmd-role','.cmd-school',
+    '.team-mission','.station-note','.tl-time',
+    '.meta-chip','.tentative','.h1-sub'
+  ].join(',');
+  document.querySelectorAll(sel).forEach(el => el.contentEditable = 'true');
+}
+function disableEdit() {
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => el.contentEditable = 'false');
+  closeModal();
+}
+</script>
+</body>
+</html>
